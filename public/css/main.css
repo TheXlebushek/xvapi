@@ -1,0 +1,72 @@
+@font-face {
+  font-family: san-francisco;
+  src: url('/fonts/SF-Pro-Display-Light.otf') format('opentype');
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+::selection {
+  background-color: transparent;
+  color: #ff0149;
+}
+
+:focus {
+  outline: 2px solid #ff0149;
+}
+
+button {
+  padding: 5px 10px;
+  font-size: 20px;
+  background-color: #1c1c1e;
+  border: 0 solid transparent;
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+}
+
+button:focus {
+  outline: 3px solid #ff0149;
+}
+
+body {
+  background-color: black;
+  display: flex;
+}
+
+.text {
+  color: white;
+  font-weight: 200;
+  font-family: 'san-francisco';
+}
+
+.vertical {
+  display: flex;
+  flex-direction: column;
+}
+
+.horizontal {
+  display: flex;
+  flex-direction: row;
+}
+
+.justify {
+  justify-content: center;
+}
+
+.align {
+  align-items: center;
+}
+
+.stretch {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

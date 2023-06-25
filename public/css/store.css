@@ -1,0 +1,139 @@
+#storefront-panel {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin: 100px 10px;
+}
+
+.title {
+  margin: 100px;
+  font-weight: 300;
+  font-size: 46px;
+}
+
+.offer-text-box {
+  padding: 5px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: nowrap;
+}
+
+.offer-name {
+  padding: 3px 5px;
+  border: 0 solid transparent;
+  border-radius: 5px;
+  font-size: 22px;
+  margin-bottom: 3px;
+}
+
+.gradient {
+  background: linear-gradient(-45deg, transparent, transparent, #2c2c2e);
+}
+
+.offer {
+  overflow: hidden;
+  margin: 10px;
+  height: 180px;
+  width: 320px;
+  background-color: #1c1c1e;
+  display: flex;
+  flex-direction: column;
+  border-radius: 15px;
+}
+
+.offer-image-box {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex: 1;
+}
+
+.offer-image {
+  max-height: 100px;
+  max-width: 300px;
+}
+
+.icon {
+  height: 22px;
+  width: 22px;
+}
+
+.price-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 5px;
+}
+
+.info-box {
+  width: 100%;
+  justify-content: space-between;
+}
+
+#time-panel {
+  display: flex;
+  background-color: #1c1c1e;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 10px;
+  align-self: flex-start;
+  margin-left: 100px;
+  border-radius: 10px;
+}
+
+#balance-panel {
+  display: flex;
+  background-color: #1c1c1e;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 10px;
+  align-self: flex-end;
+  margin-right: 100px;
+  border-radius: 10px;
+}
+
+.shadow {
+  animation: 0.25s ease-out forwards shadowingReverse;
+}
+
+.shadow:hover {
+  animation: 0.25s ease-out forwards shadowing;
+}
+
+@keyframes shadowing {
+  from {
+    scale: 0.9;
+    filter: drop-shadow(5px 5px 5px #000000);
+  }
+  to {
+    scale: 1;
+    filter: drop-shadow(15px 15px 8px #000000);
+  }
+}
+
+@keyframes shadowingReverse {
+  from {
+    scale: 1;
+    filter: drop-shadow(15px 15px 8px #000000);
+  }
+  to {
+    scale: 0.9;
+    filter: drop-shadow(5px 5px 5px #000000);
+  }
+}
+
+.slide-up {
+  animation: 0.25s ease-out forwards textAppearing;
+}
+
+@keyframes textAppearing {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

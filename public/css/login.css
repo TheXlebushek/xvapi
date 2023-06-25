@@ -1,0 +1,49 @@
+body {
+  height: 90vh;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: column;
+}
+
+h1.title {
+  font-weight: 300;
+  font-size: 46px;
+}
+
+form {
+  margin: 100px;
+  width: 225px;
+}
+
+form * {
+  margin: 5px;
+  padding: 5px 15px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+}
+
+#loginInput,
+#passwordInput {
+  font-size: 20px;
+  background-color: #1c1c1e;
+}
+
+#loginInput:focus,
+#passwordInput:focus {
+  outline: 2px solid #ff0149;
+}
+
+#loginButton {
+  margin-top: 10px;
+  font-size: 20px;
+  background-color: #2c2c2e;
+}
+
+#loginButton:focus {
+  outline: 3px solid #ff0149;
+}
