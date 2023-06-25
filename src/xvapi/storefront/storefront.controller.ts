@@ -2,6 +2,7 @@ import {
   Controller,
   Post,
   Param,
+  Get,
   Query,
   HttpException,
   HttpStatus,
@@ -16,7 +17,7 @@ export class StorefrontController {
     private readonly userManagerService: UserManagerService,
   ) {}
 
-  @Post('store/:uuid')
+  @Get('store/:uuid')
   async fetchStore(
     @Param('uuid') uuid: string,
     @Query('language') language: string,
@@ -33,7 +34,7 @@ export class StorefrontController {
     }
   }
 
-  @Post('nightMarket/:uuid')
+  @Get('nightMarket/:uuid')
   async fetchNightMarket(
     @Param('uuid') uuid: string,
     @Query('language') language: string,
@@ -50,7 +51,7 @@ export class StorefrontController {
     }
   }
 
-  @Post('weapon/:uuid')
+  @Get('weapon/:uuid')
   async fetchWeapon(
     @Param('uuid') uuid: string,
     @Query('language') language: string,

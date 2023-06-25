@@ -249,6 +249,6 @@ export class StorefrontService {
         headers: { 'Content-Type': 'application/json' },
       },
     ).then((r) => r.json());
-    return weaponInfo;
+    return weaponInfo.data;
   }
 }

@@ -4,10 +4,7 @@ if (!sessionStorage.getItem('uuid')) {
 
 const uuid = sessionStorage.getItem('uuid');
 
-let storeFront = await fetch(`xvapi/storefront/store/${uuid}`, {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-});
+let storeFront = await fetch(`xvapi/storefront/store/${uuid}`);
 
 if (!storeFront.ok) {
   sessionStorage.removeItem('uuid');
@@ -32,9 +29,12 @@ storeOffersDiv.forEach((offerDiv, i) => {
   offerDiv.appendChild(imageBox);
 
   const image = document.createElement('img');
-  image.src = offer.displayIcon;
   image.classList.add('offer-image');
   image.classList.add('shadow');
+  image.onclick = () => {
+    window.location.href = `/weapon/${offer.uuid}`;
+  };
+  image.src = offer.displayIcon;
   imageBox.append(image);
 
   const textBox = document.createElement('div');
@@ -43,9 +43,9 @@ storeOffersDiv.forEach((offerDiv, i) => {
   offerDiv.append(textBox);
 
   const text = document.createElement('h2');
-  text.textContent = offer.displayName;
   text.classList.add('text');
   text.classList.add('offer-name');
+  text.textContent = offer.displayName;
   textBox.append(text);
 
   const priceBox = document.createElement('div');
@@ -53,21 +53,21 @@ storeOffersDiv.forEach((offerDiv, i) => {
   textBox.append(priceBox);
 
   const vp = document.createElement('img');
-  vp.src = storeFront.currencies.find((e) => e.displayName == 'VP').displayIcon;
   vp.classList.add('icon');
+  vp.src = storeFront.currencies.find((e) => e.displayName == 'VP').displayIcon;
   vp.style.marginBottom = '5px';
   priceBox.append(vp);
 
   const price = document.createElement('h2');
-  price.textContent = offer.cost;
   price.classList.add('text');
+  price.textContent = offer.cost;
   price.style.margin = '0 5px';
   price.style.marginBottom = '5px';
   priceBox.append(price);
 
   const logo = document.createElement('img');
-  logo.src = offer.rarityIcon;
   logo.classList.add('icon');
+  logo.src = offer.rarityIcon;
   logo.style.marginBottom = '5px';
   priceBox.appendChild(logo);
 });
@@ -75,33 +75,33 @@ storeOffersDiv.forEach((offerDiv, i) => {
 const balancePanel = document.querySelector('#balance-panel');
 
 const vp = document.createElement('img');
-vp.src = storeFront.currencies.find((e) => e.displayName == 'VP').displayIcon;
 vp.classList.add('icon');
+vp.src = storeFront.currencies.find((e) => e.displayName == 'VP').displayIcon;
 vp.style.marginLeft = '15px';
 balancePanel.append(vp);
 
 const vpBalance = document.createElement('h2');
+vpBalance.classList.add('text');
 vpBalance.innerText = storeFront.currencies.find(
   (e) => e.displayName == 'VP',
 ).amount;
 vpBalance.style.marginLeft = '5px';
-vpBalance.classList.add('text');
 balancePanel.append(vpBalance);
 
 const rp = document.createElement('img');
+rp.classList.add('icon');
 rp.src = storeFront.currencies.find(
   (e) => e.displayName == 'Radianite Points',
 ).displayIcon;
 rp.style.marginLeft = '15px';
-rp.classList.add('icon');
 balancePanel.append(rp);
 
 const rpBalance = document.createElement('h2');
+rpBalance.classList.add('text');
 rpBalance.innerText = storeFront.currencies.find(
   (e) => e.displayName == 'Radianite Points',
 ).amount;
 rpBalance.style.marginLeft = '5px';
-rpBalance.classList.add('text');
 balancePanel.append(rpBalance);
 
 let time = storeFront.timeLeft;

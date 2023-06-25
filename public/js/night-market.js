@@ -4,10 +4,7 @@ if (!sessionStorage.getItem('uuid')) {
 
 const uuid = sessionStorage.getItem('uuid');
 
-let storefront = await fetch(`xvapi/storefront/nightMarket/${uuid}`, {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-});
+let storefront = await fetch(`xvapi/storefront/nightMarket/${uuid}`);
 
 if (!storefront.ok) {
   sessionStorage.removeItem('uuid');
@@ -82,6 +79,9 @@ storeOffersDiv.forEach((offerDiv, i) => {
 
   let image = document.createElement('img');
   image.src = offer.displayIcon;
+  image.onclick = () => {
+    window.location.href = `/weapon/${offer.uuid}`;
+  };
   image.classList.add('offer-image');
   image.classList.add('shadow');
   imageBox.append(image);
