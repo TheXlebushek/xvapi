@@ -30,14 +30,17 @@ storeOffersDiv.forEach((offerDiv, i) => {
   imageBox.classList.add('offer-image-box');
   offerDiv.appendChild(imageBox);
 
+  const weaponLink = document.createElement('a');
+  weaponLink.href = `/weapon/${offer.uuid}`;
+  weaponLink.classList.add('weapon-link');
+  weaponLink.classList.add('select-animation');
+  imageBox.appendChild(weaponLink);
+
   const image = document.createElement('img');
   image.classList.add('offer-image');
   image.classList.add('shadow');
-  image.onclick = () => {
-    window.location.href = `/weapon/${offer.uuid}`;
-  };
   image.src = offer.displayIcon;
-  imageBox.append(image);
+  weaponLink.append(image);
 
   const textBox = document.createElement('div');
   textBox.classList.add('offer-text-box');

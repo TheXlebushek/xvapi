@@ -12,14 +12,34 @@ console.log(weaponData);
 
 document.title = weaponData.displayName;
 document.getElementById('title').innerText = weaponData.displayName;
+const titleBox = document.getElementById('title-box');
+titleBox.style.backgroundColor = `#${weaponData.highlightColor}`;
+const rarityIcon = document.createElement('img');
+rarityIcon.classList.add('icon');
+rarityIcon.src = weaponData.rarityIcon;
+titleBox.appendChild(rarityIcon);
+
 const weaponContainer = document.getElementById('weapon-container');
 if (weaponData.wallpaper) {
   weaponContainer.style.background = `url(${weaponData.wallpaper})`;
   weaponContainer.style.backgroundSize = 'cover';
 }
 const chromasBox = document.getElementById('chromas');
+const levels = document.getElementById('levels');
 
 weaponData.chromas.forEach((chroma) => {
+  const chromaVideoBox = document.createElement('div');
+  const chromaVideo = document.createElement('video');
+  if (chroma.streamedVideo) {
+    chromaVideoBox.classList.add('chroma-video-box');
+    levels.appendChild(chromaVideoBox);
+
+    chromaVideo.classList.add('chroma-video');
+    chromaVideo.src = chroma.streamedVideo;
+    chromaVideo.loop = true;
+    chromaVideoBox.appendChild(chromaVideo);
+  }
+
   const chromaContainer = document.createElement('div');
   chromaContainer.classList.add('chroma-box');
   chromasBox.appendChild(chromaContainer);
@@ -31,6 +51,25 @@ weaponData.chromas.forEach((chroma) => {
   const displayIcon = document.createElement('img');
   displayIcon.classList.add('shadow');
   displayIcon.classList.add('chroma-image');
+  if (chroma.streamedVideo) {
+    displayIcon.onmouseover = () => {
+      const levelBoxes = document.getElementsByClassName('level-box');
+      for (let i = 0; i < levelBoxes.length; ++i)
+        levelBoxes[i].style.opacity = '0';
+      document.getElementById('title-box').style.opacity = '0';
+      chromaVideoBox.style.display = 'block';
+      chromaVideo.play();
+    };
+    displayIcon.onmouseleave = () => {
+      const levelBoxes = document.getElementsByClassName('level-box');
+      for (let i = 0; i < levelBoxes.length; ++i)
+        levelBoxes[i].style.opacity = '1';
+      document.getElementById('title-box').style.opacity = '1';
+      chromaVideoBox.style.display = 'none';
+      chromaVideo.pause();
+      chromaVideo.currentTime = 0;
+    };
+  }
   if (!chroma.displayIcon) displayIcon.src = chroma.fullRender;
   else displayIcon.src = chroma.displayIcon;
   imageBox.appendChild(displayIcon);
@@ -52,6 +91,7 @@ weaponData.chromas.forEach((chroma) => {
 });
 
 const levelsContainer = document.getElementById('levels-box');
+
 weaponData.levels.forEach((level) => {
   if (!level.streamedVideo) return;
   const levelBox = document.createElement('div');

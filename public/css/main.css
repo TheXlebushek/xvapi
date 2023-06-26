@@ -79,6 +79,14 @@ body {
   animation: 0.25s ease-out forwards shadowing;
 }
 
+.shadow:focus {
+  animation: 0.25s ease-out forwards shadowing;
+}
+
+.shadow::selection {
+  animation: 0.25s ease-out forwards shadowing;
+}
+
 @keyframes shadowing {
   from {
     scale: 0.9;
@@ -113,5 +121,24 @@ body {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+.weapon-link:focus {
+  text-decoration: none;
+  border: none;
+  outline: none;
+}
+
+.select-animation:focus {
+  animation: 0.25s ease-in-out forwards select-animation;
+}
+
+@keyframes select-animation {
+  from {
+    scale: 0.9;
+  }
+  to {
+    scale: 1;
   }
 }

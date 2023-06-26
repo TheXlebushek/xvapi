@@ -249,6 +249,57 @@ export class StorefrontService {
         headers: { 'Content-Type': 'application/json' },
       },
     ).then((r) => r.json());
-    return weaponInfo.data;
+
+    const contentTiers = await fetch(
+      'https://valorant-api.com/v1/contenttiers',
+      {
+        headers: { 'Content-Type': 'application/json' },
+      },
+    )
+      .then((r) => r.json())
+      .then((data) => {
+        const retVal = [];
+        for (let i = 0; i < data.data.length; ++i) {
+          retVal.push({
+            uuid: data.data[i].uuid,
+            highlightColor: data.data[i].highlightColor,
+            displayIcon: data.data[i].displayIcon,
+          });
+        }
+        return retVal;
+      });
+
+    const found = this.prefetchedData.find((e) => e.uuid == uuid);
+    const foundTiers = contentTiers.find(
+      (e) => e.uuid == found.contentTiedUUID,
+    );
+
+    const chromas = [];
+    weaponInfo.data.chromas.forEach((chroma) =>
+      chromas.push({
+        displayIcon: chroma.displayIcon,
+        fullRender: chroma.fullRender,
+        displayName: chroma.displayName,
+        streamedVideo: chroma.streamedVideo,
+      }),
+    );
+
+    const levels = [];
+    weaponInfo.data.levels.forEach((level) =>
+      levels.push({
+        displayIcon: level.displayIcon,
+        displayName: level.displayName,
+        streamedVideo: level.streamedVideo,
+      }),
+    );
+
+    return {
+      chromas,
+      levels,
+      displayName: weaponInfo.data.displayName,
+      wallpaper: weaponInfo.data.wallpaper,
+      rarityIcon: foundTiers.displayIcon,
+      highlightColor: foundTiers.highlightColor,
+    };
   }
 }
