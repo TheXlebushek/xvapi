@@ -4,7 +4,9 @@ if (!sessionStorage.getItem('uuid')) {
 
 const uuid = sessionStorage.getItem('uuid');
 
-let storefront = await fetch(`xvapi/storefront/nightMarket/${uuid}`);
+let storefront = await fetch(`xvapi/storefront/nightMarket/${uuid}`, {
+  method: 'POST',
+});
 
 if (!storefront.ok) {
   sessionStorage.removeItem('uuid');

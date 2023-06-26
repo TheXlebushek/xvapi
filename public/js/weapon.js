@@ -35,12 +35,20 @@ weaponData.chromas.forEach((chroma) => {
   else displayIcon.src = chroma.displayIcon;
   imageBox.appendChild(displayIcon);
 
-  const displayName = document.createElement('h3');
+  const textBox = document.createElement('div');
+  textBox.classList.add('chroma-text-box');
+  chromaContainer.appendChild(textBox);
+
+  const displayName = document.createElement('h2');
   displayName.classList.add('text');
   displayName.classList.add('chroma-text');
   displayName.classList.add('slide-up');
+  if (chroma.displayName.length > 40) {
+    displayName.style.fontSize = '18px';
+    displayName.style.marginBottom = '0';
+  }
   displayName.innerText = chroma.displayName;
-  chromaContainer.appendChild(displayName);
+  textBox.appendChild(displayName);
 });
 
 const levelsContainer = document.getElementById('levels-box');
@@ -56,9 +64,19 @@ weaponData.levels.forEach((level) => {
   video.loop = true;
   video.muted = true;
   video.preload = 'auto';
+
+  video.onkeyup = (e) => {
+    if (e.key == 'm') video.muted = !video.muted;
+    if (e.key == 'f') video.requestFullscreen();
+    if (e.key == 'r') video.currentTime = 0;
+  };
   video.onclick = () => {
-    video.controls = !video.controls;
-    video.muted = !video.controls;
+    video.controls = false;
+    video.muted = !video.muted;
+  };
+  video.oncontextmenu = () => {
+    video.controls = true;
+    return false;
   };
   video.onmouseover = () => {
     video.play();
@@ -66,6 +84,8 @@ weaponData.levels.forEach((level) => {
   video.onmouseleave = () => {
     video.pause();
     video.currentTime = 0;
+    video.muted = true;
+    video.controls = false;
   };
   levelBox.appendChild(video);
 

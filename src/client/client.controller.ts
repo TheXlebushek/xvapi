@@ -1,15 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  HttpException,
-  HttpStatus,
-  Query,
-  Param,
-  Redirect,
-  Res,
-} from '@nestjs/common';
+import { Controller, Get, Param, Res } from '@nestjs/common';
 import { Response } from 'express';
 
 @Controller()
@@ -24,7 +13,7 @@ export class ClientController {
   //TODO
   // @Get('xvapi')
   // xvapi(@Res() res: Response) {
-  //   res.render('docks', {layout: 'docks', title: 'docks'})
+  //   res.render('docs', {layout: 'docs', title: 'docs'})
   // }
 
   @Get('store')

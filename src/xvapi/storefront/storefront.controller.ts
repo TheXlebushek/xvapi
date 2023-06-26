@@ -17,7 +17,7 @@ export class StorefrontController {
     private readonly userManagerService: UserManagerService,
   ) {}
 
-  @Get('store/:uuid')
+  @Post('store/:uuid')
   async fetchStore(
     @Param('uuid') uuid: string,
     @Query('language') language: string,
@@ -34,7 +34,7 @@ export class StorefrontController {
     }
   }
 
-  @Get('nightMarket/:uuid')
+  @Post('nightMarket/:uuid')
   async fetchNightMarket(
     @Param('uuid') uuid: string,
     @Query('language') language: string,
@@ -58,7 +58,6 @@ export class StorefrontController {
   ) {
     try {
       language = language || 'en-US';
-      console.log(uuid);
       const weaponData = await this.storefrontService.fetchWeapon(uuid, {
         language,
       });

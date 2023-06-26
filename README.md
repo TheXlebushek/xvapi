@@ -1,6 +1,6 @@
 # xvapi
 
-## This is unofficial valorant api wrapper with a gui implementation (couldn't find better words [pls help me])
+## This is an unofficial valorant api wrapper with a gui implementation (couldn't find better words [pls help me])
 
 #
 

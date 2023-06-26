@@ -10,7 +10,6 @@
   margin: 10px;
   overflow: hidden;
   justify-content: space-around;
-  align-content: flex-end;
   background-color: #1c1c1e;
   border-radius: 15px;
   margin-right: 50px;
@@ -18,9 +17,11 @@
 
 .image-box {
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
+  /* justify-content: center; */
   align-items: center;
-  margin: 5px;
+  flex: 1;
+  /* margin: 5px; */
 }
 
 .chroma-image {
@@ -28,7 +29,15 @@
   max-width: 300px;
 }
 
+.chroma-text-box {
+  padding: 5px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
 .chroma-text {
+  font-size: 24px;
   margin: 0 10px;
   margin-bottom: 5px;
 }

@@ -4,7 +4,9 @@ if (!sessionStorage.getItem('uuid')) {
 
 const uuid = sessionStorage.getItem('uuid');
 
-let storeFront = await fetch(`xvapi/storefront/store/${uuid}`);
+let storeFront = await fetch(`xvapi/storefront/store/${uuid}`, {
+  method: 'POST',
+});
 
 if (!storeFront.ok) {
   sessionStorage.removeItem('uuid');
