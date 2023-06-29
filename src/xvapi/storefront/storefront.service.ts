@@ -96,6 +96,7 @@ export class StorefrontService {
             [
               '85ad13f7-3d1b-5128-9eb2-7cd8ee0b5741',
               'e59aa87c-4cbf-517a-5983-6e81511be9b7',
+              '85ca954a-41f2-ce94-9b45-8ca3dd39a00d',
             ].some((e) => e == data.data[i].uuid)
           ) {
             currencies.push({
@@ -144,6 +145,44 @@ export class StorefrontService {
         },
       },
     ).then((r) => r.json());
+
+    const currencies = [];
+    await fetch('https://valorant-api.com/v1/currencies')
+      .then((r) => r.json())
+      .then((data) => {
+        for (let i = 0; i < data.data.length; ++i) {
+          if (
+            [
+              '85ad13f7-3d1b-5128-9eb2-7cd8ee0b5741',
+              'e59aa87c-4cbf-517a-5983-6e81511be9b7',
+              '85ca954a-41f2-ce94-9b45-8ca3dd39a00d',
+            ].some((e) => e == data.data[i].uuid)
+          ) {
+            currencies.push({
+              uuid: data.data[i].uuid,
+              displayIcon: data.data[i].displayIcon,
+              displayName: data.data[i].displayName,
+              amount: 0,
+            });
+          }
+        }
+      });
+
+    await fetch(`https://pd.eu.a.pvp.net/store/v1/wallet/${user.uuid}`, {
+      method: 'GET',
+      headers: {
+        cookie: user.cookieManager.getCookieString(),
+        Authorization: `Bearer ${user.accessToken}`,
+        'X-Riot-Entitlements-JWT': user.entitlement,
+      },
+    })
+      .then((r) => r.json())
+      .then((data) => {
+        for (let i = 0; i < currencies.length; ++i)
+          currencies[i].amount = data.Balances[currencies[i].uuid];
+      });
+
+    if (!response.BonusStore) return { timeLeft: 0, currencies };
 
     const offers = [];
     for (let i = 0; i < response.BonusStore.BonusStoreOffers.length; ++i) {
@@ -195,41 +234,6 @@ export class StorefrontService {
       offers[i].highlightColor = foundTiers.highlightColor;
       offers[i].rarityIcon = foundTiers.displayIcon;
     }
-
-    const currencies = [];
-    await fetch('https://valorant-api.com/v1/currencies')
-      .then((r) => r.json())
-      .then((data) => {
-        for (let i = 0; i < data.data.length; ++i) {
-          if (
-            [
-              '85ad13f7-3d1b-5128-9eb2-7cd8ee0b5741',
-              'e59aa87c-4cbf-517a-5983-6e81511be9b7',
-            ].some((e) => e == data.data[i].uuid)
-          ) {
-            currencies.push({
-              uuid: data.data[i].uuid,
-              displayIcon: data.data[i].displayIcon,
-              displayName: data.data[i].displayName,
-              amount: 0,
-            });
-          }
-        }
-      });
-
-    await fetch(`https://pd.eu.a.pvp.net/store/v1/wallet/${user.uuid}`, {
-      method: 'GET',
-      headers: {
-        cookie: user.cookieManager.getCookieString(),
-        Authorization: `Bearer ${user.accessToken}`,
-        'X-Riot-Entitlements-JWT': user.entitlement,
-      },
-    })
-      .then((r) => r.json())
-      .then((data) => {
-        for (let i = 0; i < currencies.length; ++i)
-          currencies[i].amount = data.Balances[currencies[i].uuid];
-      });
 
     response = {
       timeLeft: response.BonusStore.BonusStoreRemainingDurationInSeconds,

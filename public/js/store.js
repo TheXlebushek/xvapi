@@ -50,6 +50,7 @@ storeOffersDiv.forEach((offerDiv, i) => {
   const text = document.createElement('h2');
   text.classList.add('text');
   text.classList.add('offer-name');
+  if (offer.displayName.length > 20) text.style.fontSize = '18px';
   text.textContent = offer.displayName;
   textBox.append(text);
 
@@ -108,6 +109,23 @@ rpBalance.innerText = storeFront.currencies.find(
 ).amount;
 rpBalance.style.marginLeft = '5px';
 balancePanel.append(rpBalance);
+
+const kc = document.createElement('img');
+kc.classList.add('icon');
+console.log(storeFront.currencies);
+kc.src = storeFront.currencies.find(
+  (e) => e.displayName == 'Kingdom Credits',
+).displayIcon;
+kc.style.marginLeft = '15px';
+balancePanel.append(kc);
+
+const kcBalance = document.createElement('h2');
+kcBalance.classList.add('text');
+kcBalance.innerText = storeFront.currencies.find(
+  (e) => e.displayName == 'Kingdom Credits',
+).amount;
+kcBalance.style.marginLeft = '5px';
+balancePanel.append(kcBalance);
 
 let time = storeFront.timeLeft;
 const timeLeft = document.createElement('h2');

@@ -37,6 +37,7 @@ weaponData.chromas.forEach((chroma) => {
     chromaVideo.classList.add('chroma-video');
     chromaVideo.src = chroma.streamedVideo;
     chromaVideo.loop = true;
+    chromaVideo.muted = true;
     chromaVideoBox.appendChild(chromaVideo);
   }
 
@@ -104,6 +105,7 @@ weaponData.levels.forEach((level) => {
   video.loop = true;
   video.muted = true;
   video.preload = 'auto';
+  video.currentTime = 0.1;
 
   video.onkeyup = (e) => {
     if (e.key == 'm') video.muted = !video.muted;
@@ -123,7 +125,7 @@ weaponData.levels.forEach((level) => {
   };
   video.onmouseleave = () => {
     video.pause();
-    video.currentTime = 0;
+    video.currentTime = 0.1;
     video.muted = true;
     video.controls = false;
   };

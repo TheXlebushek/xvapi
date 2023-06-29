@@ -50,6 +50,23 @@ rpBalance.style.marginLeft = '5px';
 rpBalance.classList.add('text');
 balancePanel.append(rpBalance);
 
+const kc = document.createElement('img');
+kc.src = storefront.currencies.find(
+  (e) => e.displayName == 'Kingdom Credits',
+).displayIcon;
+kc.style.marginLeft = '15px';
+kc.style.height = '24px';
+kc.style.width = '24px';
+balancePanel.append(kc);
+
+const kcBalance = document.createElement('h2');
+kcBalance.innerText = storefront.currencies.find(
+  (e) => e.displayName == 'Kingdom Credits',
+).amount;
+kcBalance.style.marginLeft = '5px';
+kcBalance.classList.add('text');
+balancePanel.append(kcBalance);
+
 if (!storefront.timeLeft) {
   document.getElementById('title').innerText =
     'Night market is not available at the moment';

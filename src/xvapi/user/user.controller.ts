@@ -1,4 +1,10 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { Credentials } from '../globals/utilities';
 import { UserManagerService } from '../globals/userManager.service';
@@ -12,7 +18,11 @@ export class UserController {
 
   @Post('auth')
   async auth(@Body() credentials: Credentials): Promise<string> {
-    const user = await this.userService.create();
-    return await this.userManagerService.auth(user, credentials);
+    try {
+      const user = await this.userService.create();
+      return await this.userManagerService.auth(user, credentials);
+    } catch (e) {
+      throw new HttpException(e, HttpStatus.BAD_REQUEST);
+    }
   }
 }
