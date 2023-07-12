@@ -13,6 +13,7 @@ console.log(weaponData);
 document.title = weaponData.displayName;
 document.getElementById('title').innerText = weaponData.displayName;
 const titleBox = document.getElementById('title-box');
+weaponData.highlightColor = `${weaponData.highlightColor.slice(0, 6)}33`;
 titleBox.style.backgroundColor = `#${weaponData.highlightColor}`;
 const rarityIcon = document.createElement('img');
 rarityIcon.classList.add('icon');

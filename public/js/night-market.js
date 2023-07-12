@@ -90,6 +90,7 @@ storeOffersDiv.forEach((offerDiv, i) => {
 
   offerDiv.innerHTML = '';
 
+  offer.highlightColor = `${offer.highlightColor.slice(0, 6)}33`;
   offerDiv.style.backgroundColor = `#${offer.highlightColor}`;
 
   let imageBox = document.createElement('div');
