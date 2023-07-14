@@ -4,44 +4,57 @@ if (!sessionStorage.getItem('uuid')) {
 
 const uuid = sessionStorage.getItem('uuid');
 
-let storeFront = await fetch(`xvapi/storefront/store/${uuid}`, {
+let accessoryStore = await fetch(`xvapi/storefront/accessoryStore/${uuid}`, {
   method: 'POST',
 });
 
-if (!storeFront.ok) {
+if (!accessoryStore.ok) {
   sessionStorage.removeItem('uuid');
   document.location = '/';
 }
 
-storeFront = await storeFront.json();
-console.log(storeFront);
-
-[...document.getElementsByClassName('offer')].forEach((e) => {
-  e.classList.remove('gradient');
-});
+accessoryStore = await accessoryStore.json();
+console.log(accessoryStore);
 
 const storeOffersDiv = document.querySelectorAll('.offer');
 storeOffersDiv.forEach((offerDiv, i) => {
-  const offer = storeFront.offers[i];
+  const offer = accessoryStore.offers[i];
   offerDiv.innerHTML = '';
-  offer.highlightColor = `${offer.highlightColor.slice(0, 6)}33`;
-  offerDiv.style.backgroundColor = `#${offer.highlightColor}`;
 
   const imageBox = document.createElement('div');
   imageBox.classList.add('offer-image-box');
   offerDiv.appendChild(imageBox);
 
-  const weaponLink = document.createElement('a');
-  weaponLink.href = `/weapon/${offer.uuid}`;
-  weaponLink.classList.add('weapon-link');
-  weaponLink.classList.add('select-animation');
-  imageBox.appendChild(weaponLink);
+  const largeImageBox = document.getElementById('large-image-box');
+  const largeImage = document.createElement('img');
+  if (offer.largeImage) {
+    largeImage.classList.add('large-image');
+    largeImage.classList.add('slide-down-small');
+    largeImage.style.display = 'none';
+    if (offer.typeId == '3f296c07-64c3-494c-923b-fe692a4fa1bd')
+      largeImage.classList.add('card');
+    largeImage.src = offer.largeImage;
+    largeImageBox.append(largeImage);
+  }
 
   const image = document.createElement('img');
   image.classList.add('offer-image');
   image.classList.add('shadow');
-  image.src = offer.displayIcon;
-  weaponLink.append(image);
+  if (offer.typeId != 'de7caa6b-adf7-4588-bbd1-143831e786c6')
+    image.src = offer.displayIcon;
+  else image.src = '/images/playerTitle.png';
+  imageBox.append(image);
+  if (offer.largeImage) {
+    const title = document.getElementById('title');
+    image.onmouseover = () => {
+      largeImage.style.display = 'block';
+      title.style.opacity = '0';
+    };
+    image.onmouseleave = () => {
+      largeImage.style.display = 'none';
+      title.style.opacity = '1';
+    };
+  }
 
   const textBox = document.createElement('div');
   textBox.classList.add('offer-text-box');
@@ -61,7 +74,9 @@ storeOffersDiv.forEach((offerDiv, i) => {
 
   const vp = document.createElement('img');
   vp.classList.add('icon');
-  vp.src = storeFront.currencies.find((e) => e.displayName == 'VP').displayIcon;
+  vp.src = accessoryStore.currencies.find(
+    (e) => e.displayName == 'Kingdom Credits',
+  ).displayIcon;
   vp.style.marginBottom = '5px';
   priceBox.append(vp);
 
@@ -71,67 +86,52 @@ storeOffersDiv.forEach((offerDiv, i) => {
   price.style.margin = '0 5px';
   price.style.marginBottom = '5px';
   priceBox.append(price);
-
-  const logo = document.createElement('img');
-  logo.classList.add('icon');
-  logo.src = offer.rarityIcon;
-  logo.style.marginBottom = '5px';
-  priceBox.appendChild(logo);
 });
 
 const balancePanel = document.querySelector('#balance-panel');
 
-const vp = document.createElement('img');
-vp.classList.add('icon');
-vp.src = storeFront.currencies.find((e) => e.displayName == 'VP').displayIcon;
-vp.style.marginLeft = '15px';
-balancePanel.append(vp);
-
-const vpBalance = document.createElement('h2');
-vpBalance.classList.add('text');
-vpBalance.innerText = storeFront.currencies.find(
-  (e) => e.displayName == 'VP',
-).amount;
-vpBalance.style.marginLeft = '5px';
-balancePanel.append(vpBalance);
-
-const rp = document.createElement('img');
-rp.classList.add('icon');
-rp.src = storeFront.currencies.find(
-  (e) => e.displayName == 'Radianite Points',
+const kc = document.createElement('img');
+kc.classList.add('icon');
+kc.src = accessoryStore.currencies.find(
+  (e) => e.displayName == 'Kingdom Credits',
 ).displayIcon;
-rp.style.marginLeft = '15px';
-balancePanel.append(rp);
+kc.style.marginLeft = '15px';
+balancePanel.append(kc);
 
-const rpBalance = document.createElement('h2');
-rpBalance.classList.add('text');
-rpBalance.innerText = storeFront.currencies.find(
-  (e) => e.displayName == 'Radianite Points',
+const kcBalance = document.createElement('h2');
+kcBalance.classList.add('text');
+kcBalance.innerText = accessoryStore.currencies.find(
+  (e) => e.displayName == 'Kingdom Credits',
 ).amount;
-rpBalance.style.marginLeft = '5px';
-balancePanel.append(rpBalance);
+kcBalance.style.marginLeft = '5px';
+balancePanel.append(kcBalance);
 
-let time = storeFront.timeLeft;
+let time = accessoryStore.timeLeft;
 const timeLeft = document.createElement('h2');
 timeLeft.classList.add('text');
 timeLeft.style.marginLeft = '5px';
 {
+  let days = Math.floor(time / (3600 * 24));
+  if (days < 10) days = `0${days}`;
   let hours = Math.floor((time % (3600 * 24)) / 3600);
   if (hours < 10) hours = `0${hours}`;
   let minutes = Math.floor((time % 3600) / 60);
   if (minutes < 10) minutes = `0${minutes}`;
   let seconds = Math.floor(time % 60);
   if (seconds < 10) seconds = `0${seconds}`;
-  timeLeft.innerText = `${hours}:${minutes}:${seconds}`;
+  timeLeft.innerText = `${days}:${hours}:${minutes}:${seconds}`;
 }
 document.getElementById('time-panel').append(timeLeft);
+
 setInterval(() => {
   --time;
+  let days = Math.floor(time / (3600 * 24));
+  if (days < 10) days = `0${days}`;
   let hours = Math.floor((time % (3600 * 24)) / 3600);
   if (hours < 10) hours = `0${hours}`;
   let minutes = Math.floor((time % 3600) / 60);
   if (minutes < 10) minutes = `0${minutes}`;
   let seconds = Math.floor(time % 60);
   if (seconds < 10) seconds = `0${seconds}`;
-  timeLeft.innerText = `${hours}:${minutes}:${seconds}`;
+  timeLeft.innerText = `${days}:${hours}:${minutes}:${seconds}`;
 }, 1000);

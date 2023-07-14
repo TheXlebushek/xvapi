@@ -4,7 +4,9 @@ import { Config } from '../globals/utilities';
 
 @Injectable()
 export class StorefrontService {
-  private prefetchedData = [];
+  private prefetchedData = {
+    skins: [],
+  };
 
   constructor() {
     fetch('https://valorant-api.com/v1/weapons/skins/', {
@@ -13,7 +15,7 @@ export class StorefrontService {
       .then((r) => r.json())
       .then((data) => {
         for (let i = 0; i < data.data.length; ++i) {
-          this.prefetchedData.push({
+          this.prefetchedData.skins.push({
             pageUUID: data.data[i].uuid,
             contentTiedUUID: data.data[i].contentTierUuid,
             displayName: data.data[i].displayName,
@@ -49,7 +51,6 @@ export class StorefrontService {
         cost: response.SkinsPanelLayout.SingleItemStoreOffers[i].Cost[
           '85ad13f7-3d1b-5128-9eb2-7cd8ee0b5741'
         ],
-        //pageUUID: '',
         displayIcon: '',
         displayName: '',
         highlightColor: '',
@@ -76,11 +77,12 @@ export class StorefrontService {
       });
 
     for (let i = 0; i < offers.length; ++i) {
-      const found = this.prefetchedData.find((e) => e.uuid == offers[i].uuid);
+      const found = this.prefetchedData.skins.find(
+        (e) => e.uuid == offers[i].uuid,
+      );
       const foundTiers = contentTiers.find(
         (e) => e.uuid == found.contentTiedUUID,
       );
-      //offers[i].pageUUID = found.pageUUID;
       offers[i].displayName = found.displayName;
       offers[i].displayIcon = found.displayIcon;
       offers[i].highlightColor = foundTiers.highlightColor;
@@ -96,7 +98,6 @@ export class StorefrontService {
             [
               '85ad13f7-3d1b-5128-9eb2-7cd8ee0b5741',
               'e59aa87c-4cbf-517a-5983-6e81511be9b7',
-              '85ca954a-41f2-ce94-9b45-8ca3dd39a00d',
             ].some((e) => e == data.data[i].uuid)
           ) {
             currencies.push({
@@ -196,7 +197,6 @@ export class StorefrontService {
         cost: response.BonusStore.BonusStoreOffers[i].Offer.Cost[
           '85ad13f7-3d1b-5128-9eb2-7cd8ee0b5741'
         ],
-        //pageUUID: '',
         displayIcon: '',
         displayName: '',
         highlightColor: '',
@@ -224,11 +224,12 @@ export class StorefrontService {
       });
 
     for (let i = 0; i < offers.length; ++i) {
-      const found = this.prefetchedData.find((e) => e.uuid == offers[i].uuid);
+      const found = this.prefetchedData.skins.find(
+        (e) => e.uuid == offers[i].uuid,
+      );
       const foundTiers = contentTiers.find(
         (e) => e.uuid == found.contentTiedUUID,
       );
-      //offers[i].pageUUID = found.pageUUID;
       offers[i].displayName = found.displayName;
       offers[i].displayIcon = found.displayIcon;
       offers[i].highlightColor = foundTiers.highlightColor;
@@ -245,7 +246,9 @@ export class StorefrontService {
   }
 
   async fetchWeapon(uuid: string, config: Config) {
-    const skinUUID = this.prefetchedData.find((e) => e.uuid == uuid).pageUUID;
+    const skinUUID = this.prefetchedData.skins.find(
+      (e) => e.uuid == uuid,
+    ).pageUUID;
     const weaponInfo = await fetch(
       `https://valorant-api.com/v1/weapons/skins/${skinUUID}?language=${config.language}`,
       {
@@ -273,7 +276,7 @@ export class StorefrontService {
         return retVal;
       });
 
-    const found = this.prefetchedData.find((e) => e.uuid == uuid);
+    const found = this.prefetchedData.skins.find((e) => e.uuid == uuid);
     const foundTiers = contentTiers.find(
       (e) => e.uuid == found.contentTiedUUID,
     );
@@ -305,5 +308,121 @@ export class StorefrontService {
       rarityIcon: foundTiers.displayIcon,
       highlightColor: foundTiers.highlightColor,
     };
+  }
+
+  async fetchAccessoryStore(user: User, config: Config) {
+    let response = await fetch(
+      `https://pd.eu.a.pvp.net/store/v2/storefront/${user.uuid}`,
+      {
+        method: 'GET',
+        headers: {
+          cookie: user.cookieManager.getCookieString(),
+          Authorization: `Bearer ${user.accessToken}`,
+          'X-Riot-Entitlements-JWT': user.entitlement,
+        },
+      },
+    ).then((r) => r.json());
+
+    const offers = [];
+    for (
+      let i = 0;
+      i < response.AccessoryStore.AccessoryStoreOffers.length;
+      ++i
+    ) {
+      offers.push({
+        uuid: response.AccessoryStore.AccessoryStoreOffers[i].Offer.Rewards[0]
+          .ItemID,
+        cost: response.AccessoryStore.AccessoryStoreOffers[i].Offer.Cost[
+          '85ca954a-41f2-ce94-9b45-8ca3dd39a00d'
+        ],
+        displayIcon: '',
+        displayName: '',
+        largeImage: '',
+        typeId:
+          response.AccessoryStore.AccessoryStoreOffers[i].Offer.Rewards[0]
+            .ItemTypeID,
+      });
+    }
+
+    for (let i = 0; i < offers.length; ++i) {
+      if (offers[i].typeId == 'd5f120f8-ff8c-4aac-92ea-f2b5acbe9475') {
+        const sprayData = await fetch(
+          `https://valorant-api.com/v1/sprays/${offers[i].uuid}`,
+        ).then((r) => r.json());
+        offers[i].displayName = sprayData.data.displayName;
+        offers[i].displayIcon = sprayData.data.displayIcon;
+        offers[i].largeImage =
+          sprayData.data.animationPng || sprayData.data.fullTransparentIcon;
+      }
+
+      if (offers[i].typeId == 'dd3bf334-87f3-40bd-b043-682a57a8dc3a') {
+        const sprayData = await fetch(
+          `https://valorant-api.com/v1/buddies/levels/${offers[i].uuid}`,
+        ).then((r) => r.json());
+        offers[i].displayName = sprayData.data.displayName;
+        offers[i].displayIcon = sprayData.data.displayIcon;
+        offers[i].largeImage = sprayData.data.displayIcon;
+      }
+
+      if (offers[i].typeId == '3f296c07-64c3-494c-923b-fe692a4fa1bd') {
+        const sprayData = await fetch(
+          `https://valorant-api.com/v1/playercards/${offers[i].uuid}`,
+        ).then((r) => r.json());
+        offers[i].displayName = sprayData.data.displayName;
+        offers[i].displayIcon = sprayData.data.displayIcon;
+        offers[i].largeImage = sprayData.data.largeArt;
+      }
+
+      if (offers[i].typeId == 'de7caa6b-adf7-4588-bbd1-143831e786c6') {
+        const sprayData = await fetch(
+          `https://valorant-api.com/v1/playertitles/${offers[i].uuid}`,
+        ).then((r) => r.json());
+        offers[i].displayName = sprayData.data.displayName;
+        offers[i].displayIcon = sprayData.data.displayIcon;
+      }
+    }
+
+    const currencies = [];
+    await fetch('https://valorant-api.com/v1/currencies')
+      .then((r) => r.json())
+      .then((data) => {
+        for (let i = 0; i < data.data.length; ++i) {
+          if (
+            ['85ca954a-41f2-ce94-9b45-8ca3dd39a00d'].some(
+              (e) => e == data.data[i].uuid,
+            )
+          ) {
+            currencies.push({
+              uuid: data.data[i].uuid,
+              displayIcon: data.data[i].displayIcon,
+              displayName: data.data[i].displayName,
+              amount: 0,
+            });
+          }
+        }
+      });
+
+    await fetch(`https://pd.eu.a.pvp.net/store/v1/wallet/${user.uuid}`, {
+      method: 'GET',
+      headers: {
+        cookie: user.cookieManager.getCookieString(),
+        Authorization: `Bearer ${user.accessToken}`,
+        'X-Riot-Entitlements-JWT': user.entitlement,
+      },
+    })
+      .then((r) => r.json())
+      .then((data) => {
+        for (let i = 0; i < currencies.length; ++i)
+          currencies[i].amount = data.Balances[currencies[i].uuid];
+      });
+
+    response = {
+      timeLeft:
+        response.AccessoryStore.AccessoryStoreRemainingDurationInSeconds,
+      offers,
+      currencies,
+    };
+
+    return response;
   }
 }

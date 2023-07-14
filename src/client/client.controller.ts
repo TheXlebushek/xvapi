@@ -13,7 +13,7 @@ export class ClientController {
   //TODO
   // @Get('xvapi')
   // xvapi(@Res() res: Response) {
-  //   res.render('docs', {layout: 'docs', title: 'docs'})
+  //   res.render('docks', {layout: 'docks', title: 'docks'})
   // }
 
   @Get('store')
@@ -34,5 +34,10 @@ export class ClientController {
   @Get('weapon/:uuid')
   weapon(@Res() res: Response, @Param('uuid') uuid: string) {
     res.render('weapon', { layout: 'main', title: 'weapon' });
+  }
+
+  @Get('accessory-store')
+  accessoryStore(@Res() res: Response) {
+    res.render('accessory-store', { layout: 'main', title: 'accessory store' });
   }
 }

@@ -66,4 +66,22 @@ export class StorefrontController {
       throw new HttpException(e, HttpStatus.BAD_REQUEST);
     }
   }
+
+  @Post('accessoryStore/:uuid')
+  async fetchAccessoryStore(
+    @Param('uuid') uuid: string,
+    @Query('language') language: string,
+  ) {
+    try {
+      language = language || 'en-US';
+      const user = await this.userManagerService.getByUUID(uuid);
+      const accessoryStoreOffers =
+        await this.storefrontService.fetchAccessoryStore(user, {
+          language,
+        });
+      return accessoryStoreOffers;
+    } catch (e) {
+      throw new HttpException(e, HttpStatus.BAD_REQUEST);
+    }
+  }
 }

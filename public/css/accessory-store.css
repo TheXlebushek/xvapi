@@ -1,4 +1,4 @@
-#storefront-panel {
+#accessory-store-panel {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
@@ -6,8 +6,40 @@
 }
 
 #title {
+  margin: 150px;
   font-weight: 300;
   font-size: 46px;
+}
+
+#large-image-box {
+  position: absolute;
+  transform: translateY(-200px);
+  z-index: 1;
+}
+
+.large-image {
+  max-height: 400px;
+  min-height: 200px;
+}
+
+.card {
+  border: 3px solid white;
+  border-radius: 15px;
+}
+
+.slide-down-small {
+  animation: 0.25s ease-out forwards slideDownSmall;
+}
+
+@keyframes slideDownSmall {
+  from {
+    opacity: 0;
+    transform: translateY(-50%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .offer-text-box {
