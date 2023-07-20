@@ -18,4 +18,17 @@ export class CookieManager {
       .join(' ')
       .substring(0, this.cookies.join(' ').length - 1);
   }
+
+  get(cookieNames: string[]): string {
+    const retVal = this.cookies
+      .filter((e) => cookieNames.some((ee) => e.includes(ee)))
+      .join(' ');
+    return retVal.substring(retVal.length - 1);
+  }
+
+  filter(cookieNames: string[]): void {
+    this.cookies = this.cookies.filter((e) =>
+      cookieNames.some((ee) => e.includes(ee)),
+    );
+  }
 }

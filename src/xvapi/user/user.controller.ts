@@ -4,6 +4,7 @@ import {
   Body,
   HttpException,
   HttpStatus,
+  Query,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { Credentials } from '../globals/utilities';
@@ -17,10 +18,19 @@ export class UserController {
   ) {}
 
   @Post('auth')
-  async auth(@Body() credentials: Credentials): Promise<string> {
+  async auth(
+    @Body() credentials: Credentials,
+    @Query('remember') remember: string,
+  ): Promise<string> {
     try {
       const user = await this.userService.create();
-      return await this.userManagerService.auth(user, credentials);
+      const retVal = await this.userManagerService.auth(user, credentials);
+      if (remember == 'true') {
+        setInterval(() => {
+          user.reauth();
+        }, 15 * 60 * 1000);
+      }
+      return retVal;
     } catch (e) {
       throw new HttpException(e, HttpStatus.BAD_REQUEST);
     }

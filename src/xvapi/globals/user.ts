@@ -86,6 +86,24 @@ export class User {
     this.entitlement = entitlement;
   }
 
+  async reauth() {
+    const response = await fetch(
+      'https://auth.riotgames.com/authorize?redirect_uri=https%3A%2F%2Fplayvalorant.com%2Fopt_in&client_id=play-valorant-web-prod&response_type=token%20id_token&nonce=1',
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          cookie: this.cookieManager.getCookieString(),
+        },
+      },
+    );
+    this.cookieManager.filter(['__cf_bm', 'asid']);
+    this.cookieManager.add(response, ['tdid', 'clid', 'ssid', 'sub', 'csid']);
+
+    await this.fetchEntitlementToken();
+    this.creationDate = new Date();
+  }
+
   login: string;
   accessToken: string;
   entitlement: string;

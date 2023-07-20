@@ -1,6 +1,11 @@
 document.getElementById('loginButton').onclick = async () => {
+  document.getElementById('loginButton').disabled = true;
   sessionStorage.removeItem('uuid');
-  const response = await fetch('/xvapi/user/auth', {
+  let remember = false;
+  if (document.getElementById('rememberInput').checked) remember = true;
+
+  const query = '?' + (remember ? 'remember=true' : '');
+  const response = await fetch(`/xvapi/user/auth${query}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -15,10 +20,12 @@ document.getElementById('loginButton').onclick = async () => {
   }
   document.getElementById('loginInput').style.backgroundColor = '#ff014980';
   document.getElementById('passwordInput').style.backgroundColor = '#ff014980';
+  document.getElementById('loginButton').disabled = true;
 };
 
 document.addEventListener('keypress', (e) => {
-  if (e.key == 'Enter') document.getElementById('loginButton').click();
+  if (e.key == 'Enter' && !document.getElementById('loginButton').disabled)
+    document.getElementById('loginButton').click();
 });
 
 if (sessionStorage.getItem('uuid')) {
