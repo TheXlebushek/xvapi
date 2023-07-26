@@ -1,6 +1,6 @@
 const logoutButton = document.getElementById('logout');
 logoutButton.onclick = () => {
-  sessionStorage.removeItem('uuid');
+  localStorage.removeItem('uuid');
   document.location.reload();
 };
 

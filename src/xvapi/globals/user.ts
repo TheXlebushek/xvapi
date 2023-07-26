@@ -97,8 +97,8 @@ export class User {
         },
       },
     );
-    this.cookieManager.filter(['__cf_bm', 'asid']);
-    this.cookieManager.add(response, ['tdid', 'clid', 'ssid', 'sub', 'csid']);
+
+    this.accessToken = parse(response.url).get('access_token');
 
     await this.fetchEntitlementToken();
     this.creationDate = new Date();

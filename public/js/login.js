@@ -1,11 +1,8 @@
 document.getElementById('loginButton').onclick = async () => {
   document.getElementById('loginButton').disabled = true;
-  sessionStorage.removeItem('uuid');
-  let remember = false;
-  if (document.getElementById('rememberInput').checked) remember = true;
+  localStorage.removeItem('uuid');
 
-  const query = '?' + (remember ? 'remember=true' : '');
-  const response = await fetch(`/xvapi/user/auth${query}`, {
+  const response = await fetch(`/xvapi/user/auth`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -14,7 +11,7 @@ document.getElementById('loginButton').onclick = async () => {
     }),
   });
   if (response.ok) {
-    sessionStorage.setItem('uuid', await response.text());
+    localStorage.setItem('uuid', await response.text());
     document.location.reload();
     return;
   }
@@ -28,6 +25,6 @@ document.addEventListener('keypress', (e) => {
     document.getElementById('loginButton').click();
 });
 
-if (sessionStorage.getItem('uuid')) {
+if (localStorage.getItem('uuid')) {
   document.location = '/store';
 }

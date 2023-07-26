@@ -1,15 +1,15 @@
-if (!sessionStorage.getItem('uuid')) {
+if (!localStorage.getItem('uuid')) {
   document.location = '/';
 }
 
-const uuid = sessionStorage.getItem('uuid');
+const uuid = localStorage.getItem('uuid');
 
 let accessoryStore = await fetch(`xvapi/storefront/accessoryStore/${uuid}`, {
   method: 'POST',
 });
 
 if (!accessoryStore.ok) {
-  sessionStorage.removeItem('uuid');
+  localStorage.removeItem('uuid');
   document.location = '/';
 }
 

@@ -1,15 +1,15 @@
-if (!sessionStorage.getItem('uuid')) {
+if (!localStorage.getItem('uuid')) {
   document.location = '/';
 }
 
-const uuid = sessionStorage.getItem('uuid');
+const uuid = localStorage.getItem('uuid');
 
 let storeFront = await fetch(`xvapi/storefront/store/${uuid}`, {
   method: 'POST',
 });
 
 if (!storeFront.ok) {
-  sessionStorage.removeItem('uuid');
+  localStorage.removeItem('uuid');
   document.location = '/';
 }
 
@@ -51,7 +51,9 @@ storeOffersDiv.forEach((offerDiv, i) => {
   const text = document.createElement('h2');
   text.classList.add('text');
   text.classList.add('offer-name');
-  if (offer.displayName.length > 20) text.style.fontSize = '18px';
+  if (offer.displayName.length >= 19) text.style.fontSize = '20px';
+  else if (offer.displayName.length >= 25) text.style.fontSize = '18px';
+  else if (offer.displayName.length >= 30) text.style.fontSize = '16px';
   text.textContent = offer.displayName;
   textBox.append(text);
 

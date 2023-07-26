@@ -42,6 +42,7 @@ export class UserManagerService {
   async getByUUID(uuid: string): Promise<User> {
     const user = this.users.find((user) => user.uuid == uuid);
     if (!user) throw 'User not found';
+    await user.reauth();
     return user;
   }
 }

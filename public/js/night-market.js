@@ -1,15 +1,15 @@
-if (!sessionStorage.getItem('uuid')) {
+if (!localStorage.getItem('uuid')) {
   document.location = '/';
 }
 
-const uuid = sessionStorage.getItem('uuid');
+const uuid = localStorage.getItem('uuid');
 
 let storefront = await fetch(`xvapi/storefront/nightMarket/${uuid}`, {
   method: 'POST',
 });
 
 if (!storefront.ok) {
-  sessionStorage.removeItem('uuid');
+  localStorage.removeItem('uuid');
   document.location = '/';
 }
 

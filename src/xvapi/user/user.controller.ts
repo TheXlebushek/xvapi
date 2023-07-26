@@ -18,19 +18,10 @@ export class UserController {
   ) {}
 
   @Post('auth')
-  async auth(
-    @Body() credentials: Credentials,
-    @Query('remember') remember: string,
-  ): Promise<string> {
+  async auth(@Body() credentials: Credentials): Promise<string> {
     try {
       const user = await this.userService.create();
-      const retVal = await this.userManagerService.auth(user, credentials);
-      if (remember == 'true') {
-        setInterval(() => {
-          user.reauth();
-        }, 15 * 60 * 1000);
-      }
-      return retVal;
+      return await this.userManagerService.auth(user, credentials);
     } catch (e) {
       throw new HttpException(e, HttpStatus.BAD_REQUEST);
     }
